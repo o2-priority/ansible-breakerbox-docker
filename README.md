@@ -51,5 +51,5 @@ servicename is `myapp-8080`)
 ## Dependencies
 none
 
-[Registrator]: (http://gliderlabs.com/registrator/latest/)
-[Breakerbox]: (https://github.com/yammer/breakerbox)
+[Registrator]: http://gliderlabs.com/registrator/latest/
+[Breakerbox]: https://github.com/yammer/breakerbox
