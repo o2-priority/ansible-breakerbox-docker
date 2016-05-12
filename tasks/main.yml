@@ -1,0 +1,39 @@
+---
+
+- name: Create breakerbox work directory
+  file: path="{{ item }}" state=directory
+  with_items:
+    - "{{ breakerbox_docker_work_dir }}"
+    - "{{ breakerbox_docker_conf_dir }}"
+    - "{{ breakerbox_docker_ctmpl_dir }}"
+
+- name: Create breakerbox config directory
+  file: path="{{ breakerbox_docker_conf_dir }}" state=directory
+
+- name: Copy breakerbox config file
+  copy: 
+    src:  "breakerbox.yml"
+    dest: "{{ breakerbox_docker_conf_dir }}/breakerbox.yml"
+
+- name: Create consul-template template file of breakerbox config.properties
+  template: 
+    src:  "config.properties.ctmpl.j2"
+    dest: "{{ breakerbox_docker_ctmpl_dir }}/config.properties.ctmpl"
+
+- name: Render consul-template template of breakerbox config.properties
+  shell: >
+    consul-template \
+      -consul "{{ breakerbox_docker_consul_host }}:{{ breakerbox_docker_consul_port }}" \
+      -template "{{ breakerbox_docker_ctmpl_dir }}/config.properties.ctmpl:{{ breakerbox_docker_conf_dir }}/config.properties" \
+      -once
+  register: ctmpl
+
+#- debug: var=ctmpl
+
+- name: Start breakerbox container
+  docker:
+    name:  breakerbox
+    image: "jplock/breakerbox:{{ breakerbox_docker_version|default('latest') }}"
+    state: running
+    ports: "{{ breakerbox_docker_ports }}"
+    volumes: "{{ breakerbox_docker_volumes }}"

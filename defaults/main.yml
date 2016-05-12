@@ -1,0 +1,17 @@
+---
+breakerbox_docker_version: '0.4.2'
+breakerbox_docker_work_dir: "/data/breakerbox"
+breakerbox_docker_conf_dir: "{{ breakerbox_docker_work_dir }}/conf"
+breakerbox_docker_ctmpl_dir: "{{ breakerbox_docker_work_dir }}/ctmpl"
+breakerbox_docker_ports:
+  - "8080:8080"
+  - "8081:8081"
+breakerbox_docker_volumes:
+  - "{{ breakerbox_docker_conf_dir }}/breakerbox.yml:/opt/breakerbox.yml"
+  - "{{ breakerbox_docker_conf_dir }}/config.properties:/opt/config.properties"
+
+breakerbox_docker_service_name: someService
+
+breakerbox_docker_consul_host: 
+breakerbox_docker_consul_port: 8500
+breakerbox_docker_env: development

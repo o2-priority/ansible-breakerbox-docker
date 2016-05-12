@@ -1,0 +1,51 @@
+---
+- name: Consul-Docker-Breakerbox play
+  hosts: test-kitchen
+
+  vars:
+    consul_datacenter:  kitchenDC
+    consul_encrypt_key: '74d+D4bl59FeKo0r+U5lSA=='
+    consul_primary_node: localhost
+    consul_nodes:
+      - "{{ ansible_default_ipv4.address }}"
+
+    registrator_service_registry_backend: consul
+    registrator_service_registry_host: "{{ ansible_default_ipv4.address }}"
+    registrator_service_registry_port: 8500
+
+  roles:
+    - wunzeco.consul
+    - wunzeco.consul-template
+    - wunzeco.docker
+    - wunzeco.registrator
+
+  post_tasks:
+    - name: Install curl
+      apt: name=curl state=present
+
+    - name: Start jenkins container
+      docker:
+        #name:  jenkins
+        image: "jenkins:1.651.1"
+        count: 2
+        publish_all_ports: true
+        env:
+          SERVICE_NAME: jenkins
+        state: running
+      register: j
+
+    - name: Delay a few seconds to allow jenkins container start
+      pause: seconds=10
+      when: j|changed
+
+
+- name: Breakerbox-docker play
+  hosts: test-kitchen
+
+  vars:
+    breakerbox_docker_consul_host: "{{ ansible_default_ipv4.address }}"
+    breakerbox_docker_service_name: "jenkins-8080"
+
+  roles:
+    - ansible-breakerbox-docker
+ 

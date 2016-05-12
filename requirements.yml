@@ -1,0 +1,4 @@
+- src: wunzeco.docker
+- src: wunzeco.consul
+- src: wunzeco.consul-template
+- src: wunzeco.registrator

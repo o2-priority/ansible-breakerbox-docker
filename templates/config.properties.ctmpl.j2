@@ -1,0 +1,12 @@
+turbine.aggregator.clusterConfig={{ breakerbox_docker_env }}
+
+turbine.instanceUrlSuffix=/tenacity/metrics.stream
+
+{% raw %}{{{% endraw %}if service "{{ breakerbox_docker_service_name }}" "any" {% raw %}}}{% endraw %}
+
+turbine.ConfigPropertyBasedDiscovery.{{ breakerbox_docker_env }}.instances={% raw %}{{{% endraw %}range service "{{ breakerbox_docker_service_name }}" "any" {% raw %}}}{% endraw %}
+{% raw %}{{.Address}}:{{.Port}},{{end}}{% endraw %}
+{% raw %}{{{% endraw %}else{% raw %}}}{% endraw %}
+
+# No service object found for {{ breakerbox_docker_service_name }}
+{% raw %}{{{% endraw %}end{% raw %}}}{% endraw %}
