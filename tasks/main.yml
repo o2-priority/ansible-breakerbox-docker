@@ -38,3 +38,7 @@
     ports: "{{ breakerbox_docker_ports }}"
     volumes: "{{ breakerbox_docker_volumes }}"
     command: "server /opt/conf/breakerbox.yml"
+
+- name: Configure supervisor to monitor breakerbox container
+  include: supervisor.yml
+  when: breakerbox_docker_manage_with_supervisor

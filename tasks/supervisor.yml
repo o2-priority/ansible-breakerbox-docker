@@ -1,0 +1,18 @@
+
+---
+
+# probably best to have another role for supervisor
+
+- name: Install supervisor
+  apt: name=supervisor state=present
+
+- name: Create supervisor config file for breakerbox
+  copy: 
+    src:  breakerbox.supervisord.conf
+    dest: /etc/supervisor/conf.d/breakerbox.conf
+
+- name: Start supervisor
+  service: name=supervisor state=started
+
+- name: Ensure state of breakerbox process managed by supervisor is started
+  supervisorctl: name=breakerbox state=started

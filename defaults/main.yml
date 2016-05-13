@@ -14,3 +14,5 @@ breakerbox_docker_service_name: someService
 breakerbox_docker_consul_host: 
 breakerbox_docker_consul_port: 8500
 breakerbox_docker_env: development
+
+breakerbox_docker_manage_with_supervisor: true
