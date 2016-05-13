@@ -7,8 +7,7 @@ breakerbox_docker_ports:
   - "8080:8080"
   - "8081:8081"
 breakerbox_docker_volumes:
-  - "{{ breakerbox_docker_conf_dir }}/breakerbox.yml:/opt/breakerbox.yml"
-  - "{{ breakerbox_docker_conf_dir }}/config.properties:/opt/config.properties"
+  - "{{ breakerbox_docker_conf_dir }}:/opt/conf"
 
 breakerbox_docker_service_name: someService
 

@@ -1,7 +1,6 @@
 turbine.aggregator.clusterConfig={{ breakerbox_docker_env }}
 
 turbine.instanceUrlSuffix=/tenacity/metrics.stream
-
 {% raw %}{{{% endraw %}if service "{{ breakerbox_docker_service_name }}" "any" {% raw %}}}{% endraw %}
 
 turbine.ConfigPropertyBasedDiscovery.{{ breakerbox_docker_env }}.instances={% raw %}{{{% endraw %}range service "{{ breakerbox_docker_service_name }}" "any" {% raw %}}}{% endraw %}

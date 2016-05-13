@@ -49,3 +49,6 @@
   roles:
     - ansible-breakerbox-docker
  
+  post_tasks:
+    - name: Delay a few seconds to allow breakerbox container to start
+      pause: seconds=10
