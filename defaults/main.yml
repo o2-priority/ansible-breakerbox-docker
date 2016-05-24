@@ -1,5 +1,5 @@
 ---
-breakerbox_docker_version: '0.4.2'
+breakerbox_docker_version: '0.3.4'
 breakerbox_docker_work_dir: "/data/breakerbox"
 breakerbox_docker_conf_dir: "{{ breakerbox_docker_work_dir }}/conf"
 breakerbox_docker_ctmpl_dir: "{{ breakerbox_docker_work_dir }}/ctmpl"
