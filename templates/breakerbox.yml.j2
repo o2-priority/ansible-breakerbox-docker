@@ -1,7 +1,8 @@
 breakerbox:
-  urls: file:conf/config.properties #,http://localhost:8080/archaius/breakerbox
+  urls: http://localhost:8080/archaius/breakerbox
   initialDelay: 0s
   delay: 60s
+  #urls: file:conf/config.properties,http://localhost:8080/archaius/breakerbox
 
 database:
   driverClass: org.h2.Driver
@@ -17,22 +18,15 @@ tenacityClient:
   connectionTimeout: 500ms
   timeout: 1000ms
 
-##turbine:
-##  clusters:
-##    breakerbox:
-##      instances:
-##        - localhost:8080
-##    production:
-##      clusters:
-##        - breakerbox
+turbine: /opt/conf/instances.yml
 
 server:
   applicationConnectors:
     - type: http
-      port: 8080
+      port: {{ breakerbox_docker_app_port }}
   adminConnectors:
     - type: http
-      port: 8081
+      port: {{ breakerbox_docker_admin_port }}
   gzip:
     enabled: false
 

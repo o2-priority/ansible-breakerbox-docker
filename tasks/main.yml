@@ -11,20 +11,21 @@
   file: path="{{ breakerbox_docker_conf_dir }}" state=directory
 
 - name: Copy breakerbox config file
-  copy: 
-    src:  "breakerbox.yml"
+  template: 
+    src:  "breakerbox.yml.j2"
     dest: "{{ breakerbox_docker_conf_dir }}/breakerbox.yml"
+  register: config
 
 - name: Create consul-template template file of breakerbox config.properties
   template: 
-    src:  "config.properties.ctmpl.j2"
-    dest: "{{ breakerbox_docker_ctmpl_dir }}/config.properties.ctmpl"
+    src:  "instances.yml.ctmpl.j2"
+    dest: "{{ breakerbox_docker_ctmpl_dir }}/instances.yml.ctmpl"
 
-- name: Render consul-template template of breakerbox config.properties
+- name: Render consul-template template of breakerbox instances config
   shell: >
     consul-template \
       -consul "{{ breakerbox_docker_consul_host }}:{{ breakerbox_docker_consul_port }}" \
-      -template "{{ breakerbox_docker_ctmpl_dir }}/config.properties.ctmpl:{{ breakerbox_docker_conf_dir }}/config.properties" \
+      -template "{{ breakerbox_docker_ctmpl_dir }}/instances.yml.ctmpl:{{ breakerbox_docker_conf_dir }}/instances.yml" \
       -once
   register: ctmpl
 
@@ -34,10 +35,17 @@
   docker:
     name:  breakerbox
     image: "jplock/breakerbox:{{ breakerbox_docker_version|default('latest') }}"
-    state: running
+    state: reloaded
     ports: "{{ breakerbox_docker_ports }}"
     volumes: "{{ breakerbox_docker_volumes }}"
     command: "server /opt/conf/breakerbox.yml"
+
+- name: Restart breakerbox container
+  docker:
+    name:  breakerbox
+    image: "jplock/breakerbox:{{ breakerbox_docker_version|default('latest') }}"
+    state: restarted
+  when: config|changed
 
 - name: Configure supervisor to monitor breakerbox container
   include: supervisor.yml
