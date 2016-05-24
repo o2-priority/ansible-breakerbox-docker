@@ -31,12 +31,25 @@
 
 #- debug: var=ctmpl
 
-- name: Run breakerbox container
+- name: Find current breakerbox docker container id
+  shell: 'docker ps -a -q --filter="ancestor=jplock/breakerbox:{{ breakerbox_docker_version }}"'
+  register: id
+
+- debug: var=id
+
+- name: Remove breakerbox docker container when image to use changes
   docker:
     name:  breakerbox
-    image: "jplock/breakerbox:{{ breakerbox_docker_version|default('latest') }}"
-    ports: "{{ breakerbox_docker_ports }}"
-    state: started
+    image: "jplock/breakerbox:{{ breakerbox_docker_version }}"
+    state: absent
+  when: id.stdout == ''
+
+- name: Run breakerbox container
+  docker:
+    name:    breakerbox
+    image:   "jplock/breakerbox:{{ breakerbox_docker_version }}"
+    ports:   "{{ breakerbox_docker_ports }}"
+    state:   started
     volumes: "{{ breakerbox_docker_volumes }}"
     command: "server /opt/conf/breakerbox.yml"
   register: run
@@ -44,7 +57,7 @@
 - name: Reload breakerbox container
   docker:
     name:  breakerbox
-    image: "jplock/breakerbox:{{ breakerbox_docker_version|default('latest') }}"
+    image: "jplock/breakerbox:{{ breakerbox_docker_version }}"
     state: reloaded
   when: config|changed and not run|changed
 
