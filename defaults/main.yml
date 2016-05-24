@@ -1,5 +1,5 @@
 ---
-breakerbox_docker_version: '0.3.4'
+breakerbox_docker_version: '0.4.3'
 breakerbox_docker_work_dir: "/data/breakerbox"
 breakerbox_docker_conf_dir: "{{ breakerbox_docker_work_dir }}/conf"
 breakerbox_docker_ctmpl_dir: "{{ breakerbox_docker_work_dir }}/ctmpl"
@@ -16,3 +16,6 @@ breakerbox_docker_consul_port: 8500
 breakerbox_docker_env: development
 
 breakerbox_docker_manage_with_supervisor: true
+
+breakerbox_docker_app_port: 8080
+breakerbox_docker_admin_port: 8081
