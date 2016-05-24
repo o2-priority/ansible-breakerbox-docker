@@ -18,8 +18,8 @@ end
 
 %W(
   #{breakerbox_docker_conf_dir}/breakerbox.yml
-  #{breakerbox_docker_conf_dir}/config.properties
-  #{breakerbox_docker_ctmpl_dir}/config.properties.ctmpl
+  #{breakerbox_docker_conf_dir}/instances.yml
+  #{breakerbox_docker_ctmpl_dir}/instances.yml.ctmpl
 ).each do |f|
   describe file(f) do
     it { should be_file }
