@@ -1,10 +1,6 @@
 urlSuffix: /tenacity/metrics.stream
 clusters:
-  breakerbox:
-    instances:
-      - localhost:8080
 {% raw %}{{{% endraw %}if service "{{ breakerbox_docker_service_name }}" "any" {% raw %}}}{% endraw %}
-
   {{ breakerbox_docker_env }}:
     instances:
 {% raw %}{{{% endraw %}range service "{{ breakerbox_docker_service_name }}" "any" {% raw %}}}{% endraw %}
