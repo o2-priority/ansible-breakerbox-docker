@@ -49,16 +49,19 @@
     name:    breakerbox
     image:   "jplock/breakerbox:{{ breakerbox_docker_version }}"
     ports:   "{{ breakerbox_docker_ports }}"
-    state:   started
     volumes: "{{ breakerbox_docker_volumes }}"
     command: "server /opt/conf/breakerbox.yml"
+    state:   started
   register: run
 
 - name: Reload breakerbox container
   docker:
-    name:  breakerbox
-    image: "jplock/breakerbox:{{ breakerbox_docker_version }}"
-    state: reloaded
+    name:    breakerbox
+    image:   "jplock/breakerbox:{{ breakerbox_docker_version }}"
+    ports:   "{{ breakerbox_docker_ports }}"
+    volumes: "{{ breakerbox_docker_volumes }}"
+    command: "server /opt/conf/breakerbox.yml"
+    state:   reloaded
   when: config|changed and not run|changed
 
 - name: Configure supervisor to monitor breakerbox container
