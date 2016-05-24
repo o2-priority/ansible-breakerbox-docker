@@ -35,7 +35,7 @@
   shell: 'docker ps -a -q --filter="ancestor=jplock/breakerbox:{{ breakerbox_docker_version }}"'
   register: id
 
-- debug: var=id
+- debug: var=id.stdout
 
 - name: Remove breakerbox docker container when image to use changes
   docker:
