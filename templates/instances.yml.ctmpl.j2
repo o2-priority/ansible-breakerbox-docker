@@ -3,9 +3,6 @@ clusters:
   breakerbox:
     instances:
       - localhost:8080
-  production:
-    clusters:
-      - breakerbox
 {% raw %}{{{% endraw %}if service "{{ breakerbox_docker_service_name }}" "any" {% raw %}}}{% endraw %}
 
   {{ breakerbox_docker_env }}:
