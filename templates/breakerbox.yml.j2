@@ -4,6 +4,7 @@ breakerbox:
   delay: 60s
   #urls: file:conf/config.properties,http://localhost:8080/archaius/breakerbox
 
+
 database:
   driverClass: org.h2.Driver
   url: jdbc:h2:mem:inMemory;DB_CLOSE_DELAY=-1
@@ -17,6 +18,8 @@ database:
 tenacityClient:
   connectionTimeout: 500ms
   timeout: 1000ms
+
+defaultDashboard: {{ breakerbox_docker_env }} 
 
 turbine: /opt/conf/instances.yml
 
