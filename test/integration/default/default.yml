@@ -23,7 +23,7 @@
     - name: Install curl
       apt: name=curl state=present
 
-    - name: Start jenkins container
+    - name: Start jenkins service
       docker:
         #name:  jenkins
         image: "jenkins:1.651.1"
@@ -34,9 +34,19 @@
         state: running
       register: j
 
+    - name: Start redis service
+      docker:
+        image: "redis"
+        count: 1
+        publish_all_ports: true
+        env:
+          SERVICE_NAME: redis
+        state: running
+      register: r
+
     - name: Delay a few seconds to allow jenkins container start
       pause: seconds=10
-      when: j|changed
+      when: j|changed or r|changed
 
 
 - name: Breakerbox-docker play
@@ -44,7 +54,13 @@
 
   vars:
     breakerbox_docker_consul_host: "{{ ansible_default_ipv4.address }}"
-    breakerbox_docker_service_name: "jenkins-8080"
+    breakerbox_docker_dashboards:
+      - name: jenkins
+        service_name: "jenkins-8080"
+      - name: redis
+        service_name: "redis"
+      - name: production
+        clusters: [ jenkins, redis ]
 
   roles:
     - ansible-breakerbox-docker

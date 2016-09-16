@@ -16,7 +16,7 @@
     dest: "{{ breakerbox_docker_conf_dir }}/breakerbox.yml"
   register: config
 
-- name: Create consul-template template file of breakerbox config.properties
+- name: Create consul-template template file of breakerbox instances.yml config file
   template: 
     src:  "instances.yml.ctmpl.j2"
     dest: "{{ breakerbox_docker_ctmpl_dir }}/instances.yml.ctmpl"

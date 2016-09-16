@@ -5,7 +5,7 @@ This role runs [Breakerbox] container to provide a dashboard and dynamic config
 tool for micro-service containers registered with Consul. 
 (It is assumed that the micro-service application is instrumented with Tenacity 
 library.)
-It uses consul-template to create auto-generate breakerbox config.properties file.
+It uses consul-template to auto-generate breakerbox instances.yml config file.
 
 In the context of service object as explained in [Registrator] documentation, 
 note that each listening port is considered a service.
@@ -35,7 +35,13 @@ servicename is `myapp-8080`)
   vars:
     breakerbox_docker_consul_host: "<consul_host_ip|fqdn>"
     breakerbox_docker_consul_port: 8500
-    breakerbox_docker_service_name: "myapp-8080"
+    breakerbox_docker_dashboards:
+      - name: mydash
+        service_name: "myapp-8080"
+      - name: anotherdash
+        service_name: "redis"
+      - name: production
+        clusters: [ mydash ]
 
   roles:
     - wunzeco.breakerbox-docker
@@ -47,6 +53,13 @@ servicename is `myapp-8080`)
 >    Registrator considers anything listening on a port a **service**. So if a
 >    container listens on multiple ports, it has multiple services.
 >    (source: http://gliderlabs.com/registrator/latest/user/services/)
+
+## Testing
+
+```
+kitchen test
+```
+
 
 ## Dependencies
 none
