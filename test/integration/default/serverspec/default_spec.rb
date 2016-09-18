@@ -26,6 +26,11 @@ end
   end
 end
 
+describe file("#{breakerbox_docker_conf_dir}/instances.yml") do
+  it { should contain('jenkins:').after(/^clusters:/) }
+  it { should contain('redis:').after(/^clusters:/) }
+end
+
 describe docker_container('breakerbox') do
   it { should be_running }
 end
