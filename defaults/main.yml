@@ -12,8 +12,6 @@ breakerbox_docker_volumes:
 breakerbox_docker_consul_host: 
 breakerbox_docker_consul_port: 8500
 
-breakerbox_docker_manage_with_supervisor: true
-
 breakerbox_docker_app_port: 8080
 breakerbox_docker_admin_port: 8081
 
@@ -25,3 +23,5 @@ breakerbox_docker_dashboards: []
 ##     clusters: [ mydash, another-dash ]
 
 breakerbox_docker_default_dashboard: "{{ breakerbox_docker_dashboards|map(attribute='name')|first|default('development') }}"
+
+breakerbox_consul_template_bin: "/usr/local/bin/consul-template"

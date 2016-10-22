@@ -14,7 +14,7 @@
   template: 
     src:  "breakerbox.yml.j2"
     dest: "{{ breakerbox_docker_conf_dir }}/breakerbox.yml"
-  register: config
+  notify: Restart breakerbox
 
 - name: Create consul-template template file of breakerbox instances.yml config file
   template: 
@@ -23,7 +23,7 @@
 
 - name: Render consul-template template of breakerbox instances config
   shell: >
-    consul-template \
+    {{ breakerbox_consul_template_bin }} \
       -consul "{{ breakerbox_docker_consul_host }}:{{ breakerbox_docker_consul_port }}" \
       -template "{{ breakerbox_docker_ctmpl_dir }}/instances.yml.ctmpl:{{ breakerbox_docker_conf_dir }}/instances.yml" \
       -once
@@ -31,39 +31,28 @@
 
 #- debug: var=ctmpl
 
-- name: Find current breakerbox docker container id
-  shell: 'docker ps -a -q --filter="ancestor=jplock/breakerbox:{{ breakerbox_docker_version }}"'
-  register: id
+- name: Create upstart config for breakerbox
+  template:
+    src:   breakerbox.upstart.j2
+    dest:  /etc/init/breakerbox.conf
+    owner: root
+    group: root
+    mode:  0644
+  when: ansible_os_family|lower == 'debian'
+  notify:
+    - Restart breakerbox
 
-- debug: var=id.stdout
+- name: Create systemd service unit file for breakerbox
+  template:
+    src:   breakerbox.service.j2
+    dest:  /usr/lib/systemd/system/breakerbox.service
+    owner: root
+    group: root
+    mode:  0644
+  when: ansible_os_family|lower == 'redhat'
+  notify:
+    - Reload systemd
+    - Restart breakerbox
 
-- name: Remove breakerbox docker container when image to use changes
-  docker:
-    name:  breakerbox
-    image: "jplock/breakerbox:{{ breakerbox_docker_version }}"
-    state: absent
-  when: id.stdout == ''
-
-- name: Run breakerbox container
-  docker:
-    name:    breakerbox
-    image:   "jplock/breakerbox:{{ breakerbox_docker_version }}"
-    ports:   "{{ breakerbox_docker_ports }}"
-    volumes: "{{ breakerbox_docker_volumes }}"
-    command: "server /opt/conf/breakerbox.yml"
-    state:   started
-  register: run
-
-- name: Reload breakerbox container
-  docker:
-    name:    breakerbox
-    image:   "jplock/breakerbox:{{ breakerbox_docker_version }}"
-    ports:   "{{ breakerbox_docker_ports }}"
-    volumes: "{{ breakerbox_docker_volumes }}"
-    command: "server /opt/conf/breakerbox.yml"
-    state:   reloaded
-  when: config|changed and not run|changed
-
-- name: Configure supervisor to monitor breakerbox container
-  include: supervisor.yml
-  when: breakerbox_docker_manage_with_supervisor
+- name: Start breakerbox
+  service: name=breakerbox enabled=yes state=started

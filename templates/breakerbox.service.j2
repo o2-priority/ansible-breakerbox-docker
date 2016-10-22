@@ -1,0 +1,19 @@
+[Unit]
+Description=Breakerbox Docker Container
+Requires=docker.service
+After=docker.service
+
+[Service]
+TimeoutStartSec=0
+ExecStartPre=-/usr/bin/docker kill breakerbox
+ExecStartPre=-/usr/bin/docker rm breakerbox
+ExecStartPre=/usr/bin/docker pull jplock/breakerbox:{{ breakerbox_docker_version }}
+ExecStart=/usr/bin/docker run --name breakerbox \
+                -p {{ breakerbox_docker_ports|join(' -p ') }} \
+                -v {{ breakerbox_docker_volumes|join(' -v ') }} \
+                jplock/breakerbox:{{ breakerbox_docker_version }} server /opt/conf/breakerbox.yml
+Restart=on-failure
+RestartSec=10s
+
+[Install]
+WantedBy=multi-user.target
