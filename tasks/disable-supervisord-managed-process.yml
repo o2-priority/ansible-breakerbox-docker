@@ -1,0 +1,9 @@
+---
+
+- name: Check if breakerbox config for supervisor exists
+  stat: path=/etc/supervisor/conf.d/breakerbox.conf
+  register: c
+
+- name: Disable breakerbox process managed by supervisor
+  supervisorctl: name=breakerbox state=absent
+  when: c.stat.exists

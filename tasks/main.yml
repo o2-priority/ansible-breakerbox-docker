@@ -54,5 +54,8 @@
     - Reload systemd
     - Restart breakerbox
 
+- name: Disable supervisord managed breakerbox service (if exists)
+  include: disable-supervisord-managed-process.yml
+
 - name: Start breakerbox
   service: name=breakerbox enabled=yes state=started
