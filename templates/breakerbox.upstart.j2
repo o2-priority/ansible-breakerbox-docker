@@ -14,7 +14,8 @@ end script
 
 script
     exec /usr/bin/docker run --name breakerbox \
-                -–log-driver json-file –-log-opt max-size=1g \
+                --log-driver json-file \
+                --log-opt max-size=1g \
                 -p {{ breakerbox_docker_ports|join(' -p ') }} \
                 -v {{ breakerbox_docker_volumes|join(' -v ') }} \
                 jplock/breakerbox:{{ breakerbox_docker_version }} server /opt/conf/breakerbox.yml
