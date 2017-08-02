@@ -1,9 +1,20 @@
 ---
 
-- name: Check if breakerbox config for supervisor exists
+- name: Check if supervisor config for breakerbox process exists
   stat: path=/etc/supervisor/conf.d/breakerbox.conf
   register: c
 
-- name: Disable breakerbox process managed by supervisor
+- name: Check if breakerbox process is running
+  shell: supervisorctl status
+  register: status
+
+- name: Stop breakerbox process managed by supervisor
+  supervisorctl: name=breakerbox state=stopped
+  when: c.stat.exists and status.stdout|search("^breakerbox.*RUNNING")
+
+- name: Remove breakerbox process managed by supervisor
   supervisorctl: name=breakerbox state=absent
-  when: c.stat.exists
+  when: c.stat.exists and status.stdout|search("^breakerbox")
+
+- name: Delete supervisor config for breakerbox process
+  file: path=/etc/supervisor/conf.d/breakerbox.conf state=absent
