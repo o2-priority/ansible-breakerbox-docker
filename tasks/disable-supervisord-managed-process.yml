@@ -5,7 +5,7 @@
   register: c
 
 - name: Check if breakerbox process is running
-  shell: supervisorctl status
+  shell: supervisorctl status || true
   register: status
 
 - name: Stop breakerbox process managed by supervisor
