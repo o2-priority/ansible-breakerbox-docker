@@ -9,7 +9,6 @@ respawn limit 5 10
 pre-start script
     /usr/bin/docker kill breakerbox || true
     /usr/bin/docker rm breakerbox || true
-    /usr/bin/docker pull jplock/breakerbox:{{ breakerbox_docker_version }}
 end script
 
 script
@@ -18,5 +17,5 @@ script
                 --log-opt max-size=1g \
                 -p {{ breakerbox_docker_ports|join(' -p ') }} \
                 -v {{ breakerbox_docker_volumes|join(' -v ') }} \
-                jplock/breakerbox:{{ breakerbox_docker_version }} server /opt/conf/breakerbox.yml
+                breakerbox:{{ breakerbox_docker_version }} server /opt/conf/breakerbox.yml
 end script

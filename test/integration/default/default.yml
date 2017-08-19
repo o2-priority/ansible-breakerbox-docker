@@ -29,24 +29,25 @@
       when: ansible_os_family|lower == 'redhat'
 
     - name: Start jenkins service
-      docker:
-        #name:  jenkins
+      docker_container:
+        name:  "jenkins.{{ item }}"
         image: "jenkins:1.651.1"
-        count: 2
-        publish_all_ports: true
+        published_ports: all
         env:
           SERVICE_NAME: jenkins
-        state: running
+        state: started
+      with_sequence:  count=2
       register: j
 
     - name: Start redis service
-      docker:
+      docker_container:
+        name: "redis.{{ item }}"
         image: "redis"
-        count: 1
-        publish_all_ports: true
+        published_ports: all
         env:
           SERVICE_NAME: redis
-        state: running
+        state: started
+      with_sequence:  count=1
       register: r
 
     - name: Delay a few seconds to allow jenkins container start

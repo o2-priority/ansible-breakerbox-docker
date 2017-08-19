@@ -1,14 +1,24 @@
 ---
 
-- name: Create breakerbox work directory
+- name: Create breakerbox directories
   file: path="{{ item }}" state=directory
   with_items:
     - "{{ breakerbox_docker_work_dir }}"
     - "{{ breakerbox_docker_conf_dir }}"
     - "{{ breakerbox_docker_ctmpl_dir }}"
 
-- name: Create breakerbox config directory
-  file: path="{{ breakerbox_docker_conf_dir }}" state=directory
+- name: Copy breakerbox dockerfile
+  template: 
+    src:  "Dockerfile.j2"
+    dest: "{{ breakerbox_docker_work_dir }}/Dockerfile"
+  notify: Restart breakerbox
+
+- name: Build breakerbox docker image
+  docker_image:
+    name:  breakerbox
+    tag:   "{{ breakerbox_docker_version }}"
+    path:  "{{ breakerbox_docker_work_dir }}"
+    state: present
 
 - name: Copy breakerbox config file
   template: 
