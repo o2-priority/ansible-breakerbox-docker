@@ -1,8 +1,9 @@
 require 'spec_helper'
 
-breakerbox_docker_work_dir = '/data/breakerbox'
-breakerbox_docker_conf_dir = "#{breakerbox_docker_work_dir}/conf"
+breakerbox_docker_work_dir  = '/data/breakerbox'
+breakerbox_docker_conf_dir  = "#{breakerbox_docker_work_dir}/conf"
 breakerbox_docker_ctmpl_dir = "#{breakerbox_docker_work_dir}/ctmpl"
+breakerbox_docker_version   = '0.4.4'
 breakerbox_docker_service_name_add = 'jenkins-8080'
 breakerbox_docker_service_name_remove = 'jenkins-50000'
 
@@ -17,6 +18,7 @@ breakerbox_docker_service_name_remove = 'jenkins-50000'
 end
 
 %W(
+  #{breakerbox_docker_work_dir}/Dockerfile
   #{breakerbox_docker_conf_dir}/breakerbox.yml
   #{breakerbox_docker_conf_dir}/instances.yml
   #{breakerbox_docker_ctmpl_dir}/instances.yml.ctmpl
@@ -29,6 +31,10 @@ end
 describe file("#{breakerbox_docker_conf_dir}/instances.yml") do
   it { should contain('jenkins:').after(/^clusters:/) }
   it { should contain('redis:').after(/^clusters:/) }
+end
+
+describe docker_image("breakerbox:#{breakerbox_docker_version}") do
+  it { should exist }
 end
 
 describe docker_container('breakerbox') do
