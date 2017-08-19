@@ -33,6 +33,7 @@ servicename is `myapp-8080`)
 - hosts: myhost
 
   vars:
+    breakerbox_docker_version:     0.6.4
     breakerbox_docker_consul_host: "<consul_host_ip|fqdn>"
     breakerbox_docker_consul_port: 8500
     breakerbox_docker_dashboards:
