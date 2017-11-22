@@ -67,6 +67,7 @@
         service_name: "redis"
       - name: production
         clusters: [ jenkins, redis ]
+    breakerbox_docker_maxConcurrentConnections: 50
 
   roles:
     - ansible-breakerbox-docker

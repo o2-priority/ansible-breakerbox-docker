@@ -19,6 +19,13 @@ tenacityClient:
   connectionTimeout: 500ms
   timeout: 1000ms
 
+{% if breakerbox_docker_archaius_override %}
+archaiusOverride:
+{% for key,value in breakerbox_docker_archaius_override.iteritems() %}
+  {{ key }}: {{ value }}
+{% endfor %}
+{% endif %}
+
 defaultDashboard: {{ breakerbox_docker_default_dashboard }} 
 
 turbine: /opt/conf/instances.yml

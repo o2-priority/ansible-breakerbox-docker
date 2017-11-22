@@ -3,7 +3,7 @@ require 'spec_helper'
 breakerbox_docker_work_dir  = '/data/breakerbox'
 breakerbox_docker_conf_dir  = "#{breakerbox_docker_work_dir}/conf"
 breakerbox_docker_ctmpl_dir = "#{breakerbox_docker_work_dir}/ctmpl"
-breakerbox_docker_version   = '0.4.4'
+breakerbox_docker_version   = '0.6.4'
 breakerbox_docker_service_name_add = 'jenkins-8080'
 breakerbox_docker_service_name_remove = 'jenkins-50000'
 
@@ -41,7 +41,8 @@ describe docker_container('breakerbox') do
   it { should be_running }
 end
 
-describe command('curl -s -o /dev/null -w "%{http_code}" http://localhost:8080') do
+jenkins_container_port = command(%q#docker inspect --format='{{(index (index .NetworkSettings.Ports "8080/tcp") 0).HostPort}}' $(docker ps -q --filter=name=jenkins | head -1)#).stdout
+describe command("curl -s -o /dev/null -w '%{http_code}' http://localhost:#{jenkins_container_port}") do
   its(:exit_status) { should eq 0 }
   its(:stdout) { should match '200' }
 end

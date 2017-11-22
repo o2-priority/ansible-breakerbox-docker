@@ -1,5 +1,5 @@
 ---
-breakerbox_docker_version: '0.4.4'
+breakerbox_docker_version: '0.6.4'
 breakerbox_docker_work_dir: "/data/breakerbox"
 breakerbox_docker_conf_dir: "{{ breakerbox_docker_work_dir }}/conf"
 breakerbox_docker_ctmpl_dir: "{{ breakerbox_docker_work_dir }}/ctmpl"
@@ -16,6 +16,9 @@ breakerbox_docker_app_port: 8080
 breakerbox_docker_admin_port: 8081
 
 breakerbox_docker_logging_level: INFO
+breakerbox_docker_archaius_override:
+  turbineHostRetry: 1s
+  hystrixMetricsStreamServletMaxConnections: 5
 
 breakerbox_docker_dashboards: []
 ## breakerbox_docker_dashboards:
