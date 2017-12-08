@@ -34,7 +34,7 @@
 - name: Render consul-template template of breakerbox instances config
   shell: >
     {{ breakerbox_consul_template_bin }} \
-      -consul "{{ breakerbox_docker_consul_host }}:{{ breakerbox_docker_consul_port }}" \
+      -consul-addr "{{ breakerbox_docker_consul_host }}:{{ breakerbox_docker_consul_port }}" \
       -template "{{ breakerbox_docker_ctmpl_dir }}/instances.yml.ctmpl:{{ breakerbox_docker_conf_dir }}/instances.yml" \
       -once
   register: ctmpl
