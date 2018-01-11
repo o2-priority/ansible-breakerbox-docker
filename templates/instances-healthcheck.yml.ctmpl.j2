@@ -1,0 +1,28 @@
+urlSuffix: /tenacity/metrics.stream
+clusters:
+{% for dashboard in breakerbox_docker_dashboards -%}
+
+{# Consul discover configuration #}
+{% if dashboard.service_name|default(false) -%}
+
+{% raw %}{{{% endraw %}if service "{{ dashboard.service_name }}" {% raw %}}}{% endraw %}
+  {{ dashboard.name }}:
+    instances:
+{% raw %}{{{% endraw %}range service "{{ dashboard.service_name }}" {% raw %}}}{% endraw %}
+      - {% raw %}{{.Address}}:{{.Port}}
+{{end}}{% endraw %}
+{% raw %}{{{% endraw %}else{% raw %}}}{% endraw %}
+
+# No service object found for {{ dashboard.service_name }}
+{% raw %}{{{% endraw %}end{% raw %}}}{% endraw %}
+
+{# Clusters #}
+{% elif dashboard.clusters|default([]) %}
+  {{ dashboard.name }}:
+    clusters:
+{% for cluster in dashboard.clusters %}
+      - {{ cluster }}
+{% endfor %}
+{% endif -%}
+
+{% endfor -%}
