@@ -68,6 +68,7 @@
       - name: production
         clusters: [ jenkins, redis ]
     breakerbox_docker_maxConcurrentConnections: 50
+    breakerbox_docker_consul_healthchecks: True
 
   roles:
     - ansible-breakerbox-docker

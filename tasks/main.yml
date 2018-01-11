@@ -26,10 +26,17 @@
     dest: "{{ breakerbox_docker_conf_dir }}/breakerbox.yml"
   notify: Restart breakerbox
 
-- name: Create consul-template template file of breakerbox instances.yml config file
+- name: Create consul-template template file of breakerbox instances.yml config file, with healthchecks
   template: 
+    src:  "instances-healthcheck.yml.ctmpl.j2"
+    dest: "{{ breakerbox_docker_ctmpl_dir }}/instances.yml.ctmpl"
+  when: breakerbox_docker_consul_healthchecks
+
+- name: Create consul-template template file of breakerbox instances.yml config file, no healthchecks
+  template:
     src:  "instances.yml.ctmpl.j2"
     dest: "{{ breakerbox_docker_ctmpl_dir }}/instances.yml.ctmpl"
+  when: not breakerbox_docker_consul_healthchecks
 
 - name: Render consul-template template of breakerbox instances config
   shell: >
