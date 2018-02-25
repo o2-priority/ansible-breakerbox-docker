@@ -2,22 +2,22 @@ breakerbox-docker
 ==================
 
 This role runs [Breakerbox] container to provide a dashboard and dynamic config
-tool for micro-service containers registered with Consul. 
-(It is assumed that the micro-service application is instrumented with Tenacity 
+tool for micro-service containers registered with Consul.
+(It is assumed that the micro-service application is instrumented with Tenacity
 library.)
 It uses consul-template to auto-generate breakerbox instances.yml config file.
 
-In the context of service object as explained in [Registrator] documentation, 
+In the context of service object as explained in [Registrator] documentation,
 note that each listening port is considered a service.
 
 ## Assumptions
 
-This role assumes that 
+This role assumes that
 - Docker Engine is installed *locally*
 - service discovery backend is Consul
 - services are registered on Consul using [Registrator]
-- consul-template is installed and running as a service.  You may choose to 
-  apply `wunzeco.consul-template` role to help with this but it is not enforced 
+- consul-template is installed and running as a service.  You may choose to
+  apply `wunzeco.consul-template` role to help with this but it is not enforced
   as a dependency of this role to allow you the flexibility of installing
   consul-template by any means of your choosing.
 
@@ -26,7 +26,7 @@ So it may help to familiarise yourself with Registrator, consul and consul-templ
 
 ## Example
 
-Run breakerbox container and create config.properties for a service (say 
+Run breakerbox container and create config.properties for a service (say
 servicename is `myapp-8080`)
 
 ```

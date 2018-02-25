@@ -1,5 +1,7 @@
 ---
 
+- include_vars: "{{ ansible_os_family|lower }}.yml"
+
 - name: Create breakerbox directories
   file: path="{{ item }}" state=directory
   with_items:
@@ -8,7 +10,7 @@
     - "{{ breakerbox_docker_ctmpl_dir }}"
 
 - name: Copy breakerbox dockerfile
-  template: 
+  template:
     src:  "Dockerfile.j2"
     dest: "{{ breakerbox_docker_work_dir }}/Dockerfile"
   notify: Restart breakerbox
@@ -21,13 +23,13 @@
     state: present
 
 - name: Copy breakerbox config file
-  template: 
+  template:
     src:  "breakerbox.yml.j2"
     dest: "{{ breakerbox_docker_conf_dir }}/breakerbox.yml"
   notify: Restart breakerbox
 
 - name: Create consul-template template file of breakerbox instances.yml config file, with healthchecks
-  template: 
+  template:
     src:  "instances-healthcheck.yml.ctmpl.j2"
     dest: "{{ breakerbox_docker_ctmpl_dir }}/instances.yml.ctmpl"
   when: breakerbox_docker_consul_healthchecks
@@ -55,18 +57,18 @@
     owner: root
     group: root
     mode:  0644
-  when: ansible_os_family|lower == 'debian'
+  when: ansible_service_mgr == 'upstart'
   notify:
     - Restart breakerbox
 
 - name: Create systemd service unit file for breakerbox
   template:
     src:   breakerbox.service.j2
-    dest:  /usr/lib/systemd/system/breakerbox.service
+    dest:  "{{ breakerbox_docker_systemd_units_dir }}/breakerbox.service"
     owner: root
     group: root
     mode:  0644
-  when: ansible_os_family|lower == 'redhat'
+  when: ansible_service_mgr == 'systemd'
   notify:
     - Reload systemd
     - Restart breakerbox
