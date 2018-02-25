@@ -33,6 +33,18 @@ describe file("#{breakerbox_docker_conf_dir}/instances.yml") do
   it { should contain('redis:').after(/^clusters:/) }
 end
 
+service_startup_file = '/lib/systemd/system/breakerbox.service'
+if os[:family] == 'ubuntu' and os[:release] == '14.04'
+    service_startup_file = '/etc/init/breakerbox.conf'
+elsif os[:family] =~ /centos|redhat/
+  service_startup_file = '/usr/lib/systemd/system/breakerbox.service'
+end
+
+describe file(service_startup_file) do
+  it { should be_file }
+  it { should be_mode 644 }
+end
+
 describe docker_image("breakerbox:#{breakerbox_docker_version}") do
   it { should exist }
 end
