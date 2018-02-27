@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+docker run -it --rm --link breakerbox-postgres:postgres postgres:{{ breakerbox_postgresql_version }} psql -U breakerbox -h postgres

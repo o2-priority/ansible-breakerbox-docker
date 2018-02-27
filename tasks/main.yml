@@ -76,5 +76,9 @@
 - name: Disable supervisord managed breakerbox service (if exists)
   include: disable-supervisord-managed-process.yml
 
+- name: Set up postgresql database if specified
+  include: postgres.yml
+  when: breakerbox_use_postgresql_db
+
 - name: Start breakerbox
   service: name=breakerbox enabled=yes state=started

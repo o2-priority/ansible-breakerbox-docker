@@ -1,0 +1,31 @@
+---
+- name: Create postgres data dir
+  file:
+    path: "{{ breakerbox_postgresql_data_dir }}"
+    state: directory
+
+- name: Download postgres docker image
+  docker_image:
+    name: "postgres:{{ breakerbox_postgresql_version }}"
+    state: present
+
+- name: Start up postgres docker container
+  docker_container:
+    name: breakerbox-postgres
+    image: "postgres:{{ breakerbox_postgresql_version }}"
+    published_ports: [ "5432:5432" ]
+    restart_policy: unless-stopped
+    state: started
+    volumes: [ "{{ breakerbox_postgresql_data_dir }}:/var/lib/postgresql" ]
+    keep_volumes: yes
+    env:
+      POSTGRES_DB: breakerbox
+      POSTGRES_PASSWORD: "{{ breakerbox_database_password }}"
+      POSTGRES_USER: "{{ breakerbox_database_user }}"
+
+- name: Add convenience script for postgres access
+  template:
+    src: psql.sh.j2
+    dest: /usr/local/bin/psql.sh
+    mode: 0755
+
