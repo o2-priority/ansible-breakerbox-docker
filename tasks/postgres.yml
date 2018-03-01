@@ -24,7 +24,7 @@
     published_ports: [ "5432:5432" ]
     restart_policy: unless-stopped
     state: started
-    volumes: [ "{{ breakerbox_postgresql_data_dir }}:/var/lib/postgresql" ]
+    volumes: [ "{{ breakerbox_postgresql_data_dir }}:/var/lib/postgresql/data" ]
     keep_volumes: yes
     env:
       POSTGRES_DB: breakerbox
