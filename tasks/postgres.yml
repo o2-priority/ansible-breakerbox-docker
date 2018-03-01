@@ -4,6 +4,14 @@
     path: "{{ breakerbox_postgresql_data_dir }}"
     state: directory
 
+- name: Set up breakerbox db url config
+  set_fact:
+    breakerbox_database_url: jdbc:postgresql://breakerbox-postgres/breakerbox
+
+- name: Set up breakerbox driver class config
+  set_fact:
+    breakerbox_database_driver_class: org.postgresql.Driver
+
 - name: Download postgres docker image
   docker_image:
     name: "postgres:{{ breakerbox_postgresql_version }}"
