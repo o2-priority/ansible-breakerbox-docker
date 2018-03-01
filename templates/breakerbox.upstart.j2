@@ -13,6 +13,9 @@ end script
 
 script
     exec /usr/bin/docker run --name breakerbox \
+                {% if breakerbox_use_postgresql_db %}
+                --link breakerbox-postgres \
+                {% endif %}
                 --log-driver json-file \
                 --log-opt max-size=1g \
                 -p {{ breakerbox_docker_ports|join(' -p ') }} \

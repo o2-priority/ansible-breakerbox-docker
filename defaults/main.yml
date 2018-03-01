@@ -44,7 +44,7 @@ breakerbox_postgresql_data_dir: /data/postgres
 
 ############### Example postgres config ########################
 # breakerbox_use_postgresql_db: true
-# breakerbox_database_url: jdbc:postgresql://localhost/breakerbox
+# breakerbox_database_url: jdbc:postgresql://breakerbox-postgres/breakerbox
 # breakerbox_database_driver_class: org.postgresql.Driver
 #
 # breakerbox_database_user: breakerbox
