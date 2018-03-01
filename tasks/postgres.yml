@@ -35,5 +35,5 @@
   template:
     src: psql.sh.j2
     dest: /usr/local/bin/psql.sh
-    mode: 0755
+    mode: 0700
 
