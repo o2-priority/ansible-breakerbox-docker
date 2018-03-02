@@ -71,6 +71,8 @@
     breakerbox_docker_consul_healthchecks: True
 
     breakerbox_use_postgresql_db: true
+    breakerbox_database_user: breakerbox
+    breakerbox_database_password: breakerboxpass
 
   roles:
     - ansible-breakerbox-docker

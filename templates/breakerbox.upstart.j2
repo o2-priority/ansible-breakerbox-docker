@@ -26,3 +26,8 @@ script
                 -v {{ breakerbox_docker_volumes|join(' -v ') }} \
                 breakerbox:{{ breakerbox_docker_version }} server /opt/conf/breakerbox.yml
 end script
+
+pre-stop script
+    /usr/bin/docker kill breakerbox-postgres || true
+    /usr/bin/docker rm breakerbox-postgres || true
+end script
