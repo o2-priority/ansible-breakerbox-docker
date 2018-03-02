@@ -1,0 +1,46 @@
+---
+
+- name: Fail if not using upstart
+  fail:
+    msg: "use of postgres not supported with non-Upstart init manager"
+  when:  ansible_service_mgr != 'upstart'
+
+- name: Create postgres data dir
+  file:
+    path: "{{ breakerbox_postgresql_data_dir }}"
+    state: directory
+
+- name: Set up breakerbox db url config
+  set_fact:
+    breakerbox_database_url: jdbc:postgresql://breakerbox-postgres/breakerbox
+
+- name: Set up breakerbox driver class config
+  set_fact:
+    breakerbox_database_driver_class: org.postgresql.Driver
+
+- name: Download postgres docker image
+  docker_image:
+    name: "postgres:{{ breakerbox_postgresql_version }}"
+    state: present
+
+- name: Create upstart config for breakerbox-postgres
+  template:
+    src:   breakerbox-postgres.upstart.j2
+    dest:  /etc/init/breakerbox-postgres.conf
+    owner: root
+    group: root
+    mode:  0644
+  notify:
+    - Restart breakerbox-postgres
+    - Restart breakerbox
+
+- name: Add convenience script for postgres access
+  template:
+    src: psql.sh.j2
+    dest: /usr/local/bin/psql.sh
+    mode: 0700
+
+- name: Start breakerbox-postgres
+  service:
+    name: breakerbox-postgres
+    state: started

@@ -1,6 +1,10 @@
 description "Breakerbox Docker Container"
 
+{% if breakerbox_use_postgresql_db %}
+start on started breakerbox-postgres
+{%  else %}
 start on runlevel [2345]
+{%  endif %}
 stop on runlevel [06]
 
 respawn
@@ -13,9 +17,17 @@ end script
 
 script
     exec /usr/bin/docker run --name breakerbox \
+                {% if breakerbox_use_postgresql_db %}
+                --link breakerbox-postgres \
+                {% endif %}
                 --log-driver json-file \
                 --log-opt max-size=1g \
                 -p {{ breakerbox_docker_ports|join(' -p ') }} \
                 -v {{ breakerbox_docker_volumes|join(' -v ') }} \
                 breakerbox:{{ breakerbox_docker_version }} server /opt/conf/breakerbox.yml
+end script
+
+pre-stop script
+    /usr/bin/docker kill breakerbox || true
+    /usr/bin/docker rm breakerbox || true
 end script

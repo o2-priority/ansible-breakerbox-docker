@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+docker run -it -e 'PGPASSWORD={{ breakerbox_database_password }}' --rm --link breakerbox-postgres:postgres postgres:{{ breakerbox_postgresql_version }} psql -U {{  breakerbox_database_user }} -h postgres $@

@@ -1,0 +1,27 @@
+description "Breakerbox-Postgres Docker Container"
+
+start on runlevel [2345]
+stop on runlevel [06]
+
+respawn
+respawn limit 5 10
+
+pre-start script
+    /usr/bin/docker kill breakerbox-postgres || true
+    /usr/bin/docker rm breakerbox-postgres || true
+end script
+
+script
+    exec /usr/bin/docker run --name breakerbox-postgres \
+                --log-driver json-file \
+                --log-opt max-size=1g \
+                -v '{{ breakerbox_postgresql_data_dir }}:/var/lib/postgresql/data' \
+                -e 'POSTGRES_DB=breakerbox' -e 'POSTGRES_PASSWORD={{ breakerbox_database_password }}' \
+                -e 'POSTGRES_USER={{ breakerbox_database_user }}'\
+                postgres:{{ breakerbox_postgresql_version }}
+end script
+
+pre-stop script
+    /usr/bin/docker kill breakerbox-postgres || true
+    /usr/bin/docker rm breakerbox-postgres || true
+end script

@@ -6,10 +6,10 @@ breakerbox:
 
 
 database:
-  driverClass: org.h2.Driver
-  url: jdbc:h2:mem:inMemory;DB_CLOSE_DELAY=-1
-  user: breakerbox
-  password: breakerboxpass
+  driverClass: {{ breakerbox_database_driver_class }}
+  url: {{ breakerbox_database_url }}
+  user: {{ breakerbox_database_user }}
+  password: {{ breakerbox_database_password }}
   maxSize: 10
   minSize: 2
   checkConnectionWhileIdle: true

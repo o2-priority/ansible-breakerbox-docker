@@ -1,0 +1,82 @@
+---
+- name: Consul-Docker-Breakerbox play
+  hosts: test-kitchen
+
+  vars:
+    consul_datacenter:  kitchenDC
+    consul_encrypt_key: '74d+D4bl59FeKo0r+U5lSA=='
+    consul_primary_node: localhost
+    consul_nodes:
+      - "{{ ansible_default_ipv4.address }}"
+
+    registrator_service_registry_backend: consul
+    registrator_service_registry_host: "{{ ansible_default_ipv4.address }}"
+    registrator_service_registry_port: 8500
+
+  roles:
+    - wunzeco.consul
+    - wunzeco.consul-template
+    - wunzeco.docker
+    - wunzeco.registrator
+
+  post_tasks:
+    - name: Install curl
+      apt: name=curl state=present
+      when: ansible_os_family|lower == 'debian'
+
+    - name: Install curl
+      yum: name=curl state=present
+      when: ansible_os_family|lower == 'redhat'
+
+    - name: Start jenkins service
+      docker_container:
+        name:  "jenkins.{{ item }}"
+        image: "jenkins:1.651.1"
+        published_ports: all
+        env:
+          SERVICE_NAME: jenkins
+        state: started
+      with_sequence:  count=2
+      register: j
+
+    - name: Start redis service
+      docker_container:
+        name: "redis.{{ item }}"
+        image: "redis"
+        published_ports: all
+        env:
+          SERVICE_NAME: redis
+        state: started
+      with_sequence:  count=1
+      register: r
+
+    - name: Delay a few seconds to allow jenkins container start
+      pause: seconds=10
+      when: j|changed or r|changed
+
+
+- name: Breakerbox-docker play
+  hosts: test-kitchen
+
+  vars:
+    breakerbox_docker_consul_host: "{{ ansible_default_ipv4.address }}"
+    breakerbox_docker_dashboards:
+      - name: jenkins
+        service_name: "jenkins-8080"
+      - name: redis
+        service_name: "redis"
+      - name: production
+        clusters: [ jenkins, redis ]
+    breakerbox_docker_maxConcurrentConnections: 50
+    breakerbox_docker_consul_healthchecks: True
+
+    breakerbox_use_postgresql_db: true
+    breakerbox_database_user: breakerbox
+    breakerbox_database_password: breakerboxpass
+
+  roles:
+    - ansible-breakerbox-docker
+
+  post_tasks:
+    - name: Delay a few seconds to allow breakerbox container to start
+      pause: seconds=10

@@ -5,3 +5,6 @@
 
 - name: Restart breakerbox
   service: name=breakerbox state=restarted
+
+- name: Restart breakerbox-postgres
+  service: name=breakerbox-postgres state=restarted
