@@ -31,6 +31,7 @@
     group: root
     mode:  0644
   notify:
+    - Restart breakerbox-postgres
     - Restart breakerbox
 
 - name: Add convenience script for postgres access

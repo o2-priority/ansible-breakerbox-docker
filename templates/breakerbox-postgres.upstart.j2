@@ -16,7 +16,7 @@ script
                 --log-driver json-file \
                 --log-opt max-size=1g \
                 -v '{{ breakerbox_postgresql_data_dir }}:/var/lib/postgresql/data' \
-                -e ' POSTGRES_DB=breakerbox POSTGRES_PASSWORD={{ breakerbox_database_password }}
-                POSTGRES_USER={{ breakerbox_database_user }} '\
+                -e 'POSTGRES_DB=breakerbox' -e 'POSTGRES_PASSWORD={{ breakerbox_database_password }}' \
+                -e 'POSTGRES_USER={{ breakerbox_database_user }}'\
                 postgres:{{ breakerbox_postgresql_version }}
 end script
