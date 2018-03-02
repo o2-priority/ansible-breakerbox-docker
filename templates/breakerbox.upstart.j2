@@ -1,6 +1,10 @@
 description "Breakerbox Docker Container"
 
+{% if breakerbox_use_postgresql_db %}
+start on started breakerbox-postgres
+{%  else %}
 start on runlevel [2345]
+{%  endif %}
 stop on runlevel [06]
 
 respawn
