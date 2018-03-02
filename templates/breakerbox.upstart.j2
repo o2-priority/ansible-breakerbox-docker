@@ -28,6 +28,6 @@ script
 end script
 
 pre-stop script
-    /usr/bin/docker kill breakerbox-postgres || true
-    /usr/bin/docker rm breakerbox-postgres || true
+    /usr/bin/docker kill breakerbox || true
+    /usr/bin/docker rm breakerbox || true
 end script
