@@ -38,7 +38,7 @@ breakerbox_database_url: jdbc:h2:mem:inMemory;DB_CLOSE_DELAY=-1
 breakerbox_database_user: breakerbox
 breakerbox_database_password: breakerboxpass
 
-breakerbox_use_postgresql_db: false
+breakerbox_use_postgresql_db: true
 breakerbox_postgresql_version: 10.2-alpine
 breakerbox_postgresql_data_dir: /data/postgres
 
