@@ -1,10 +1,5 @@
 ---
 
-- name: Fail if not using upstart
-  fail:
-    msg: "use of postgres not supported with non-Upstart init manager"
-  when:  ansible_service_mgr != 'upstart'
-
 - name: Create postgres data dir
   file:
     path: "{{ breakerbox_postgresql_data_dir }}"
@@ -30,7 +25,21 @@
     owner: root
     group: root
     mode:  0644
+  when: ansible_service_mgr == 'upstart'
   notify:
+    - Restart breakerbox-postgres
+    - Restart breakerbox
+
+- name: Create systemd service unit file for breakerbox-postgres
+  template:
+    src:   breakerbox-postgres.service.j2
+    dest:  "{{ breakerbox_docker_systemd_units_dir }}/breakerbox-postgres.service"
+    owner: root
+    group: root
+    mode:  0644
+  when: ansible_service_mgr == 'systemd'
+  notify:
+    - Reload systemd
     - Restart breakerbox-postgres
     - Restart breakerbox
 

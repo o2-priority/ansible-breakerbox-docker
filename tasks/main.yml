@@ -3,7 +3,7 @@
 - include_vars: "{{ ansible_os_family|lower }}.yml"
 
 - name: Set up postgresql database if specified
-  include: postgres.yml
+  include_tasks: postgres.yml
   when: breakerbox_use_postgresql_db
 
 - name: Create breakerbox directories
@@ -78,7 +78,7 @@
     - Restart breakerbox
 
 - name: Disable supervisord managed breakerbox service (if exists)
-  include: disable-supervisord-managed-process.yml
+  include_tasks: disable-supervisord-managed-process.yml
 
 - name: Start breakerbox
   service: name=breakerbox enabled=yes state=started
