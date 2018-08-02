@@ -7,7 +7,9 @@ After=docker.service
 TimeoutStartSec=0
 ExecStartPre=-/usr/bin/docker kill breakerbox-postgres
 ExecStartPre=-/usr/bin/docker rm breakerbox-postgres
+ExecStartPre=-/usr/bin/docker network create {{ breakerbox_docker_container_network }}
 ExecStart=/usr/bin/docker run --name breakerbox-postgres \
+                --network {{ breakerbox_docker_container_network }} \
                 --log-driver json-file \
                 --log-opt max-size=1g \
                 -v '{{ breakerbox_postgresql_data_dir }}:/var/lib/postgresql/data' \

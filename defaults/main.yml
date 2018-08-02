@@ -9,7 +9,7 @@ breakerbox_docker_ports:
 breakerbox_docker_volumes:
   - "{{ breakerbox_docker_conf_dir }}:/opt/conf"
 
-breakerbox_docker_consul_host: 
+breakerbox_docker_consul_host:
 breakerbox_docker_consul_port: 8500
 
 breakerbox_docker_app_port: 8080
@@ -42,5 +42,6 @@ breakerbox_use_postgresql_db: true
 breakerbox_postgresql_version: 10.2-alpine
 breakerbox_postgresql_data_dir: /data/postgres
 
+breakerbox_docker_container_network: breakerbox-net
 ############### Example postgres config ########################
 # breakerbox_use_postgresql_db: true

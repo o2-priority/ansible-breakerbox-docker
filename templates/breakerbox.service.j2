@@ -7,7 +7,9 @@ After=docker.service
 TimeoutStartSec=0
 ExecStartPre=-/usr/bin/docker kill breakerbox
 ExecStartPre=-/usr/bin/docker rm breakerbox
+ExecStartPre=-/usr/bin/docker network create {{ breakerbox_docker_container_network }}
 ExecStart=/usr/bin/docker run --name breakerbox \
+                --network {{ breakerbox_docker_container_network }} \
                 -p {{ breakerbox_docker_ports|join(' -p ') }} \
                 -v {{ breakerbox_docker_volumes|join(' -v ') }} \
                 breakerbox:{{ breakerbox_docker_version }} server /opt/conf/breakerbox.yml
