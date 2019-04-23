@@ -17,7 +17,7 @@ ExecStart=/usr/bin/docker run --name breakerbox-postgres \
                 -e 'POSTGRES_USER={{ breakerbox_database_user }}'\
                 postgres:{{ breakerbox_postgresql_version }}
 Restart=on-failure
-RestartSec=10s
+RestartSec=1s
 
 [Install]
 WantedBy=multi-user.target
