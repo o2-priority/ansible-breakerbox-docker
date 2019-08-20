@@ -82,3 +82,7 @@
 
 - name: Start breakerbox
   service: name=breakerbox enabled=yes state=started
+
+- name: Configure firewall
+  include_tasks: firewalld.yml
+  when: configure_firewall

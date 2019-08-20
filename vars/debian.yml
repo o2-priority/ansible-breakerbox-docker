@@ -1,3 +1,4 @@
 ---
 
 breakerbox_docker_systemd_units_dir: /lib/systemd/system
+configure_firewall: no

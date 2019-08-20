@@ -1,0 +1,6 @@
+- name: Configure firewalld 80 tcp
+  firewalld:
+    port: 80/tcp
+    permanent: yes
+    immediate: yes
+    state: enabled
