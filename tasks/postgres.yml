@@ -13,6 +13,11 @@
   set_fact:
     breakerbox_database_driver_class: org.postgresql.Driver
 
+
+## Fix for the issue cause due to the latest version of websocket client, docker operation were failing for docker-py lib
+- name: install websocket-client 0.59.0 version
+  shell: pip install websocket-client==0.59.0
+
 - name: Download postgres docker image
   docker_image:
     name: "postgres:{{ breakerbox_postgresql_version }}"
